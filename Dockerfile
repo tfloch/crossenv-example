@@ -1,7 +1,7 @@
 ARG ARCH
-ARG PYTHON_VER_SHORT=3.7
-ARG PYTHON_VER_FULL=$PYTHON_VER_SHORT.4
-FROM debian:buster-slim as builder
+ARG PYTHON_VER_SHORT=3.11
+ARG PYTHON_VER_FULL=$PYTHON_VER_SHORT.2
+FROM debian:bookworm-slim as builder
 
 ARG ARCH
 ARG TRIPLET
@@ -70,6 +70,7 @@ RUN wget https://www.python.org/ftp/python/$PYTHON_VER_FULL/Python-$PYTHON_VER_F
         --build=$(gcc -dumpmachine) \
         --without-ensurepip \
         --enable-unicode=ucs4 \
+        --with-build-python=/usr/local/bin/python \
         ac_cv_buggy_getaddrinfo=no \
         ac_cv_file__dev_ptmx=yes \
         ac_cv_file__dev_ptc=no \
@@ -97,7 +98,7 @@ RUN $BUILD_PYTHON_PATH/bin/python3 -m venv /venv
 RUN cp -nR $CROSS_VENV/cross/lib/python$PYTHON_VER_SHORT/site-packages/* /venv/lib/python$PYTHON_VER_SHORT/site-packages/
 
 ##############################################
-FROM $ARCH/python:$PYTHON_VER_FULL-slim-buster as prod
+FROM $ARCH/python:$PYTHON_VER_FULL-slim-bookworm as prod
 COPY --from=builder /venv /venv
 ENV PATH="/venv/bin:$PATH"
 ENTRYPOINT ["/bin/bash"]
