@@ -10,7 +10,7 @@ elif [ "$ARCH" == "arm64v8" ]; then
     TRIPLET=aarch64-linux-gnu
 elif [ "$ARCH" == "arm32v7" ]; then
     PACKAGE_ARCH=armhf
-    TRIPLET=armhf-linux-gnueabi
+    TRIPLET=arm-linux-gnueabi
 fi
 
 set -x
